@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#f3f5ef">
+	<meta name="description" content="A private, browser-based educational tool for spotting common phishing warning signs in email.">
+	<title>Phishing Email Analyser</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<header class="shell topbar">
+		<a class="brand" href="#main" aria-label="Phishing Email Analyser home">
+			<span class="brand-mark" aria-hidden="true">
+				<svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 3.2 19 6v5.2c0 4.5-2.9 7.8-7 9.6-4.1-1.8-7-5.1-7-9.6V6l7-2.8Z" stroke="currentColor" stroke-width="1.7"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			</span>
+			<span class="brand-name">Phishing Email Analyser</span>
+		</a>
+		<div class="privacy-pill">
+			<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3m-11 0h12a2 2 0 0 1 2 2v8H4v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			Private by design
+		</div>
+	</header>
+
+	<main id="main" class="shell">
+		<section class="intro" aria-labelledby="page-title">
+			<div>
+				<p class="eyebrow">Browser-based security triage</p>
+				<h1 id="page-title">Phishing Email<br>Analyser</h1>
+			</div>
+			<p class="intro-copy">Explore common email warning signs with a transparent, educational check. Your message stays on this device.</p>
+		</section>
+
+		<div class="workspace">
+			<section class="panel compose" aria-labelledby="email-heading">
+				<div class="panel-heading">
+					<div>
+						<h2 id="email-heading">Email content</h2>
+						<p class="subhead">Paste the message and, if available, its full headers.</p>
+					</div>
+					<span id="text-count" class="text-count">0 characters</span>
+				</div>
+				<label class="sr-only" for="email-input">Paste suspicious email content and optional headers</label>
+				<textarea id="email-input" spellcheck="false" placeholder="Paste email text here. You can include headers such as From, Reply-To and Authentication-Results for additional checks."></textarea>
+				<div class="examples">
+					<span class="examples-label">Try a fictional example</span>
+					<div class="example-list" aria-label="Fictional email examples">
+						<button class="example-button" type="button" data-example="obvious">Obvious phishing</button>
+						<button class="example-button" type="button" data-example="sophisticated">Sophisticated phishing</button>
+						<button class="example-button" type="button" data-example="m365">Account warning</button>
+						<button class="example-button" type="button" data-example="parcel">Parcel delivery</button>
+						<button class="example-button" type="button" data-example="invoice">Invoice / BEC</button>
+						<button class="example-button" type="button" data-example="legitimate">Legitimate email</button>
+					</div>
+				</div>
+				<div class="actions">
+					<button id="analyse-button" class="analyse-button" type="button">
+						<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.3 4.3M8.5 10.8h4.6m-2.3-2.3v4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+						Analyse Email
+					</button>
+					<button id="clear-button" class="clear-button" type="button">Clear</button>
+				</div>
+				<p class="local-note">
+					<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5 19 6v5.1c0 4.4-2.9 7.7-7 9.4-4.1-1.7-7-5-7-9.4V6l7-2.5Z" stroke="currentColor" stroke-width="1.6"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+					Local analysis only. Nothing is sent or saved.
+				</p>
+			</section>
+
+			<section class="panel results" aria-labelledby="results-heading" aria-live="polite">
+				<div class="result-top">
+					<div class="result-title-row">
+						<h2 id="results-heading">Analysis result</h2>
+						<span id="result-status" class="status-label">Ready to analyse</span>
+					</div>
+					<div class="score-area">
+						<div id="score-ring" class="score-ring" role="img" aria-label="Risk score 0 out of 100">
+							<span id="score-value" class="score-value">0</span>
+							<span class="score-denom">/ 100</span>
+						</div>
+						<div class="risk-copy">
+							<span id="risk-badge" class="risk-badge">Not yet analysed</span>
+							<p id="risk-summary">Paste a message and select Analyse Email to review its warning signs.</p>
+						</div>
+					</div>
+					<p class="score-method">Indicator points add together, capped at 100. Low: 0-24 · Suspicious: 25-59 · High: 60-100.</p>
+				</div>
+				<div class="finding-section">
+					<div class="section-heading">
+						<h3>Warning signs found</h3>
+						<span id="finding-count" class="count-chip">0</span>
+					</div>
+					<div id="finding-list" class="finding-list">
+						<div class="empty-state">Your findings will appear here with the reason and score contribution for each sign.</div>
+					</div>
+				</div>
+				<div class="recommend-section">
+					<div class="section-heading"><h3>What to do next</h3></div>
+					<ul id="recommend-list" class="recommend-list">
+						<li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5 19 6v5.1c0 4.4-2.9 7.7-7 9.4-4.1-1.7-7-5-7-9.4V6l7-2.5Z" stroke="currentColor" stroke-width="1.6"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Verify important requests through an official website, app, or known contact.</span></li>
+					</ul>
+				</div>
+			</section>
+		</div>
+
+		<aside class="notice" aria-label="Important safety and privacy information">
+			<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5m0-8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+			<p><strong>Educational triage, not a verdict.</strong> This tool looks for text patterns and can miss threats or flag harmless wording. Do not click suspicious links or open attachments to test them. Independently verify unexpected requests using an organisation's official website, app, or contact details you already trust. Analysis runs locally in this browser; email content is not uploaded, tracked, or transmitted.</p>
+		</aside>
+	</main>
+
+	<footer class="shell">
+		<span>Phishing Email Analyser · Educational use</span>
+		<span>No accounts · No tracking · No external services</span>
+	</footer>
+
+	<script>
+		"use strict";
+
+		const examples = {
+			obvious: `From: Security Team <security@secure-notice.example>\nReply-To: account-help@different-mail.example\nSubject: FINAL WARNING - account closure today\n\nURGENT: Your account will be suspended in 2 hours. We detected unusual activity. Verify your password and MFA code immediately at http://198.51.100.24/login or access: http://short.example/a7Qx. Failure to act will permanently close your account.\n\nOpen attached security_update.exe to restore access.`,
+			sophisticated: `From: Elena Park <elena.park@northstar-vendor.example>\nReply-To: elena.park@northstar-payments.example\nSubject: Updated remittance instructions for June\n\nHello Finance Team,\n\nFollowing the routine treasury review, our banking partner has migrated our settlement account. Please update the beneficiary details before processing the outstanding invoice. I have attached the revised remittance advice for your records.\n\nFor continuity, please confirm the change by replying with the current payment amount and the verification code sent to your phone. This is time-sensitive so we can avoid a delay in month-end reconciliation.\n\nRegards,\nElena Park\nNorthstar Components`,
+			m365: `From: Microsoft 365 Service Desk <notice@tenant-protection.example>\nSubject: Mailbox storage and sign-in alert\n\nWe noticed sign-in activity that requires your attention. Your Microsoft 365 mailbox will be restricted today unless you confirm your password and verification code.\n\nReview your account at https://microsoft365-account-check.example/continue\n\nDo not ignore this security notice.`,
+			parcel: `From: Parcel Dispatch <delivery@parcel-update.example>\nSubject: Delivery attempt unsuccessful\n\nWe could not deliver your parcel because a small customs payment is due. Pay the fee today to arrange a new delivery. Your parcel may be returned if payment is not received.\n\nTrack and pay: http://parcel-redelivery.example/fee\n\nThank you, Parcel Dispatch`,
+			invoice: `From: Martin Cole <martin@stonebridge-supplies.example>\nReply-To: martin-urgent@free-mail.example\nSubject: Updated invoice - payment due today\n\nHi Finance,\n\nPlease see the attached invoice for the completed work. Our bank has changed its processing details, so use the new account on the remittance advice. Kindly settle this today to avoid a late fee.\n\nCould you reply to confirm when the transfer has been made?\n\nRegards,\nMartin`,
+			legitimate: `From: Community Garden <updates@riverside-garden.example>\nSubject: Saturday volunteer morning\n\nHello neighbours,\n\nA reminder that our next community garden session is Saturday, 10:00 to 12:00. We will be planting herbs and tidying the tool shed. Please bring gloves if you have them.\n\nThe session is at the usual garden entrance. If you have questions, reply to this message or speak with the coordinator at our next meeting.\n\nBest,\nRiverside Garden volunteers`
+		};
+
+		const rules = [
+			{ id: "urgency", title: "Urgency or pressure", points: 12, severity: "medium", test: text => /\b(urgent|immediately|right away|act now|time[- ]sensitive|within \d+ (?:hours?|minutes?)|today only|final warning|do not delay|without delay)\b/i.test(text), reason: "The message pressures the reader to act quickly, which can discourage careful verification." },
+			{ id: "account-threat", title: "Account suspension or closure threat", points: 16, severity: "high", test: text => /\b(account|mailbox|access|service).{0,45}\b(suspend(?:ed|sion)?|clos(?:ed|ure)|terminat(?:ed|ion)|restrict(?:ed|ion)|deactivat(?:ed|ion))\b|\b(suspend|close|terminate|restrict|deactivate).{0,45}\b(account|mailbox|access|service)\b/i.test(text), reason: "Threats to suspend or close an account are commonly used to frighten people into acting." },
+			{ id: "password", title: "Password requested", points: 25, severity: "high", test: text => /\b(enter|provide|confirm|verify|send|reply with|share|submit).{0,35}\b(password|passcode|credentials?)\b|\b(password|credentials?).{0,35}\b(required|verify|confirm|send|reply with)\b/i.test(text), reason: "A request to share or enter a password in response to an email is a serious credential-theft warning sign." },
+			{ id: "mfa", title: "MFA or verification code requested", points: 25, severity: "high", test: text => /\b(\w+\s+){0,5}(mfa|2fa|one[- ]time|verification|security|authentication|login)\s+(code|passcode|token)\b|\b(code|passcode|token).{0,35}\b(reply with|send|share|provide|enter|confirm)\b/i.test(text), reason: "Sharing a one-time code can let someone bypass multi-factor authentication." },
+			{ id: "payment", title: "Payment or gift-card request", points: 18, severity: "high", test: text => /\b(gift cards?|prepaid cards?|wire transfer|transfer funds|pay (?:the )?(?:fee|amount|invoice)|payment is due|make (?:a )?payment|purchase.{0,20}cards?)\b/i.test(text), reason: "Unusual payment instructions or gift-card requests are frequently used in scams." },
+			{ id: "bank-change", title: "Bank-detail change request", points: 22, severity: "high", test: text => /\b(bank|banking|account|beneficiary|remittance|payment).{0,55}\b(change|changed|updated|new|update|migrat(?:ed|ion)|details|instructions)\b|\b(update|change|new|revised).{0,45}\b(bank|beneficiary|payment|remittance)\b/i.test(text), reason: "A request to change payment or bank details should always be confirmed using a known, independent contact." },
+			{ id: "suspicious-url", title: "Link destination needs caution", points: 14, severity: "medium", test: text => extractUrls(text).some(url => /^http:/i.test(url) || /@/.test(url) || /\b(?:login|verify|secure|account|update|payment|support|credential|delivery|microsoft)\b/i.test(getHostname(url))), reason: "A link uses unencrypted HTTP or a hostname containing account, payment, or verification language. Inspect links only through trusted tools; do not open them to test them." },
+			{ id: "short-url", title: "Shortened or redirect-style URL", points: 14, severity: "medium", test: text => extractUrls(text).some(url => /(?:bit\.ly|tinyurl\.com|t\.co|is\.gd|cutt\.ly|short\.example|goo\.gl|ow\.ly|rebrand\.ly)\b/i.test(url)), reason: "Shortened links hide the eventual destination, making them harder to verify from the message." },
+			{ id: "ip-url", title: "URL uses a raw IP address", points: 20, severity: "high", test: text => extractUrls(text).some(url => /^https?:\/\/(?:\d{1,3}\.){3}\d{1,3}(?=[:/]|$)/i.test(url)), reason: "The link points directly to a numeric IP address instead of a recognisable domain name." },
+			{ id: "misleading-link", title: "Displayed link text differs from destination", points: 14, severity: "medium", test: text => hasMismatchedLinkText(text), reason: "A pasted HTML or Markdown link labels one destination but points to another. The analyser can only check link markup present in the pasted text." },
+			{ id: "impersonation", title: "Possible brand or authority impersonation", points: 10, severity: "medium", test: text => /\b(microsoft|office 365|m365|paypal|amazon|apple|bank security|security team|service desk|parcel dispatch|tax authority|administrator|helpdesk)\b/i.test(text) && /\b(verify|suspend|password|payment|sign[- ]?in|account|security alert|delivery|invoice)\b/i.test(text), reason: "The message invokes a familiar brand, authority, or support role alongside an account, security, payment, or delivery action. This alone does not prove impersonation." },
+			{ id: "attachment", title: "Unusual attachment filename", points: 12, severity: "medium", test: text => /\b(?:attached|attachment|open|download)\b.{0,50}\b\S+\.(?:zip|iso|img|js|vbs|hta|lnk|one|html|htm)\b|\b\S+\.(?:zip|iso|img|js|vbs|hta|lnk|one|html|htm)\b/i.test(text), reason: "The message mentions an attachment type that can conceal executable content or prompt unsafe actions." },
+			{ id: "executable", title: "Executable attachment type", points: 25, severity: "high", test: text => /\b\S+\.(?:exe|scr|bat|cmd|com|msi|ps1|dll|jar)\b/i.test(text), reason: "An executable or script file can run code. Never open unexpected attachments to see what they do." },
+			{ id: "macros", title: "Request to enable macros", points: 20, severity: "high", test: text => /\b(enable|allow|turn on|activate).{0,30}\b(macros?|content)\b|\b(macros?).{0,35}\b(enable|disabled|turn on)\b/i.test(text), reason: "Unexpected instructions to enable document macros can expose a device to malicious code." },
+			{ id: "invoice", title: "Unexpected invoice or payment language", points: 12, severity: "medium", test: text => /\b(invoice|purchase order|remittance advice|overdue balance|outstanding invoice|late fee)\b/i.test(text), reason: "Invoice or payment language can be used to make a fraudulent request seem routine. Confirm unexpected invoices independently." },
+			{ id: "credentials", title: "Credential-harvesting language", points: 20, severity: "high", test: text => /\b(sign[- ]?in|log ?in|verify your identity|validate your account|confirm your account|restore access|unlock your account|credential verification|secure your mailbox)\b/i.test(text) && /\b(link|click|visit|portal|password|credentials?|account|sign[- ]?in|log ?in)\b/i.test(text), reason: "The message appears to steer the reader toward a sign-in or identity-verification step that could collect credentials." },
+			{ id: "reply-mismatch", title: "From and Reply-To addresses differ", points: 20, severity: "high", test: (_text, headers) => Boolean(headers.from && headers.replyTo && emailDomain(headers.from) && emailDomain(headers.replyTo) && emailDomain(headers.from) !== emailDomain(headers.replyTo)), reason: "The Reply-To domain differs from the sender's From domain. This can redirect replies to another party, though legitimate mailing systems can also use separate domains." },
+			{ id: "spf-fail", title: "SPF authentication failure", points: 14, severity: "high", test: (_text, headers) => /\bspf\s*=\s*(?:fail|softfail|permerror|temperror)\b/i.test(headers.auth), reason: "Pasted Authentication-Results headers report SPF did not pass. Header text can be forged, so treat this as a clue, not proof." },
+			{ id: "dkim-fail", title: "DKIM authentication failure", points: 12, severity: "medium", test: (_text, headers) => /\bdkim\s*=\s*(?:fail|neutral|none|permerror|temperror)\b/i.test(headers.auth), reason: "Pasted Authentication-Results headers report DKIM did not pass or was absent. Header text can be forged, so treat this as a clue, not proof." },
+			{ id: "dmarc-fail", title: "DMARC authentication failure", points: 14, severity: "high", test: (_text, headers) => /\bdmarc\s*=\s*(?:fail|bestguesspass|permerror|temperror)\b/i.test(headers.auth), reason: "Pasted Authentication-Results headers report DMARC did not pass. Header text can be forged, so treat this as a clue, not proof." }
+		];
+
+		const emailInput = document.getElementById("email-input");
+		const scoreRing = document.getElementById("score-ring");
+		const scoreValue = document.getElementById("score-value");
+		const riskBadge = document.getElementById("risk-badge");
+		const riskSummary = document.getElementById("risk-summary");
+		const findingList = document.getElementById("finding-list");
+		const recommendList = document.getElementById("recommend-list");
+
+		function extractUrls(text) {
+			return text.match(/https?:\/\/[^\s<>"'\])}]+/gi) || [];
+		}
+
+		function getHostname(url) {
+			const match = url.match(/^https?:\/\/([^/:?#]+)/i);
+			return match ? match[1].toLowerCase() : "";
+		}
+
+		function hasMismatchedLinkText(text) {
+			const markdownLinks = [...text.matchAll(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/gi)];
+			if (markdownLinks.some(match => {
+				const labelHost = match[1].match(/(?:https?:\/\/)?(?:www\.)?([a-z0-9.-]+\.[a-z]{2,})/i);
+				return labelHost && labelHost[1].toLowerCase() !== getHostname(match[2]).replace(/^www\./, "");
+			})) return true;
+
+			const htmlLinks = [...text.matchAll(/<a\b[^>]*href\s*=\s*["'](https?:\/\/[^"']+)["'][^>]*>(.*?)<\/a>/gis)];
+			return htmlLinks.some(match => {
+				const labelHost = match[2].match(/(?:https?:\/\/)?(?:www\.)?([a-z0-9.-]+\.[a-z]{2,})/i);
+				return labelHost && labelHost[1].toLowerCase() !== getHostname(match[1]).replace(/^www\./, "");
+			});
+		}
+
+		function readHeaders(text) {
+			const from = text.match(/^From:\s*.*?<([^>]+)>/im) || text.match(/^From:\s*(\S+@\S+)/im);
+			const replyTo = text.match(/^Reply-To:\s*.*?<([^>]+)>/im) || text.match(/^Reply-To:\s*(\S+@\S+)/im);
+			const authLines = text.match(/^Authentication-Results:.*(?:\n[ \t].*)*/gim) || [];
+			return { from: from ? (from[1] || from[0]).trim().toLowerCase() : "", replyTo: replyTo ? (replyTo[1] || replyTo[0]).trim().toLowerCase() : "", auth: authLines.join(" ") };
+		}
+
+		function emailDomain(address) {
+			const match = address.match(/@([^\s>]+)/);
+			return match ? match[1].replace(/[>,;]+$/, "").toLowerCase() : "";
+		}
+
+		function makeElement(tag, className, text) {
+			const element = document.createElement(tag);
+			if (className) element.className = className;
+			if (text !== undefined) element.textContent = text;
+			return element;
+		}
+
+		function renderFindings(findings) {
+			findingList.replaceChildren();
+			document.getElementById("finding-count").textContent = String(findings.length);
+			if (!findings.length) {
+				findingList.append(makeElement("div", "empty-state", "No specific warning patterns were detected in this text. This does not prove the email is safe; check the sender, context, and any links independently."));
+				return;
+			}
+			for (const finding of findings) {
+				const row = makeElement("article", `finding${finding.severity === "high" ? " high" : ""}`);
+				row.append(makeElement("span", "finding-dot"));
+				const copy = makeElement("div", "");
+				copy.append(makeElement("p", "finding-title", finding.title));
+				copy.append(makeElement("p", "finding-detail", finding.reason));
+				row.append(copy);
+				row.append(makeElement("span", "finding-points", `+${finding.points} pts`));
+				findingList.append(row);
+			}
+		}
+
+		function renderRecommendations(findings, risk) {
+			const recommendations = ["Do not click suspicious links or open unexpected attachments.", "Verify unexpected requests using an organisation's official website, app, or a known phone number."];
+			if (findings.some(item => ["password", "mfa", "credentials"].includes(item.id))) recommendations.unshift("Never share a password or one-time verification code by email or through a link in a message.");
+			if (findings.some(item => ["bank-change", "payment", "invoice"].includes(item.id))) recommendations.unshift("Confirm payment or bank-detail changes with the requester using a contact method you already trust.");
+			if (risk === "high") recommendations.push("If this is a work message, report it to your security or IT team using your normal reporting process.");
+			recommendList.replaceChildren();
+			for (const recommendation of [...new Set(recommendations)]) {
+				const item = makeElement("li", "");
+				const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+				icon.setAttribute("viewBox", "0 0 24 24");
+				icon.setAttribute("fill", "none");
+				icon.setAttribute("aria-hidden", "true");
+				const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+				path.setAttribute("d", "m5 12 4 4L19 6");
+				path.setAttribute("stroke", "currentColor");
+				path.setAttribute("stroke-width", "2");
+				path.setAttribute("stroke-linecap", "round");
+				path.setAttribute("stroke-linejoin", "round");
+				icon.append(path);
+				item.append(icon, makeElement("span", "", recommendation));
+				recommendList.append(item);
+			}
+		}
+
+		function analyse() {
+			const text = emailInput.value;
+			const headers = readHeaders(text);
+			const findings = rules.filter(rule => rule.test(text, headers));
+			const score = Math.min(100, findings.reduce((total, finding) => total + finding.points, 0));
+			const risk = score >= 60 ? "high" : score >= 25 ? "suspicious" : "low";
+			const result = {
+				high: { label: "High Risk", color: "#b44439", summary: "Several strong warning signs were found. Treat this message with significant caution." },
+				suspicious: { label: "Suspicious", color: "#bd781e", summary: "Warning signs were found. Verify the message independently before taking action." },
+				low: { label: "Low Risk", color: "#34815a", summary: findings.length ? "A small number of warning signs were found. Low score does not mean the email is safe." : "No specific warning patterns were detected. This is not confirmation that the email is safe." }
+			}[risk];
+
+			scoreValue.textContent = String(score);
+			scoreRing.style.setProperty("--score-angle", `${score * 3.6}deg`);
+			scoreRing.style.setProperty("--score-color", result.color);
+			scoreRing.setAttribute("aria-label", `Risk score ${score} out of 100`);
+			riskBadge.textContent = result.label;
+			riskBadge.className = `risk-badge ${risk}`;
+			riskSummary.textContent = result.summary;
+			document.getElementById("result-status").textContent = "Analysis complete";
+			renderFindings(findings);
+			renderRecommendations(findings, risk);
+		}
+
+		emailInput.addEventListener("input", () => {
+			const count = emailInput.value.length;
+			document.getElementById("text-count").textContent = `${count.toLocaleString()} character${count === 1 ? "" : "s"}`;
+		});
+		document.getElementById("analyse-button").addEventListener("click", analyse);
+		document.getElementById("clear-button").addEventListener("click", () => {
+			emailInput.value = "";
+			emailInput.dispatchEvent(new Event("input"));
+			scoreValue.textContent = "0";
+			scoreRing.style.setProperty("--score-angle", "0deg");
+			scoreRing.style.setProperty("--score-color", "#7f9c8a");
+			scoreRing.setAttribute("aria-label", "Risk score 0 out of 100");
+			riskBadge.textContent = "Not yet analysed";
+			riskBadge.className = "risk-badge";
+			riskSummary.textContent = "Paste a message and select Analyse Email to review its warning signs.";
+			document.getElementById("result-status").textContent = "Ready to analyse";
+			document.getElementById("finding-count").textContent = "0";
+			findingList.replaceChildren(makeElement("div", "empty-state", "Your findings will appear here with the reason and score contribution for each sign."));
+			renderRecommendations([], "low");
+		});
+		document.querySelectorAll("[data-example]").forEach(button => {
+			button.addEventListener("click", () => {
+				emailInput.value = examples[button.dataset.example];
+				emailInput.dispatchEvent(new Event("input"));
+				analyse();
+			});
+		});
+	</script>
+</body>
+</html>
